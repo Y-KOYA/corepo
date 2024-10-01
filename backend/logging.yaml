@@ -1,0 +1,42 @@
+version: 1
+disable_existing_loggers: False
+
+root:
+  handlers: [file, console]
+  level: INFO
+
+formatters:
+  simple_fmt:
+    "()": uvicorn.logging.DefaultFormatter
+    format: '%(asctime)s - (%(name)-20s) - %(levelname)s  (%(funcName)s[%(lineno)s]) %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: simple_fmt
+    level: INFO
+  file:
+    class : logging.handlers.TimedRotatingFileHandler
+    formatter: simple_fmt
+    filename: logs/backend.log
+    when: midnight
+    backupCount: 365
+    encoding: utf-8
+    level: INFO
+loggers:
+  uvicorn:
+    handlers: [file, console]
+    level: INFO
+    propagate: false
+  uvicorn.error:
+    handlers: [file, console]
+    level: INFO
+    propagate: True
+  uvicorn.access:
+    handlers: [file, console]
+    level: INFO
+    propagate: True
+  watchfiles:
+    level: WARNING
+    handlers: [file, console]
+    propagate: True
+
